@@ -1,0 +1,98 @@
+version: 0.0.9
+jobId: "1156"
+jobName: PnL OEM Price
+jobType: Source Aligned Data Product
+domain: finance
+alias: load
+discoveryPort:
+  name: PnL OEM Price
+inputPorts:
+  - alias: OEM_Price_1
+    isDynamic: true
+    path: /data/PnL/Output/Sales/OEM_Price/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Finance On-Prem Connectivity
+      dataSetUrn: urn:dv:dataset:596559be-ecd6-4b01-97bf-ee4e4fc0d70e
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: load
+  retentionVersions: ""
+  logicalSchema: ""
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: msil_dataverse_finance_catalog.oem_price_monthly
+  warehousePath: /data/iceberg_warehouse
+  catalogName: postgres
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: postgres
+  refreshInterval: None
+transformation:
+  - isDynamic: true
+    alias: Spark_SQL_1
+    description: transform
+    sequence: 2
+    inputDataFrameList:
+      - inputDataFrame: OEM_Price_1
+        tempViewName: oem_price
+    query: with month_cte as(  select all_months.col1 as month_name, all_months.col2
+      as month_seq  from (   select explode(array(("Apr", 1), ("May", 2),
+      ("Jun", 3), ("Jul", 4), ("Aug", 5), ("Sep", 6), ("Oct", 7), ("Nov", 8),
+      ("Dec", 9), ("Jan", 10), ("Feb", 11), ("Mar", 12))) as all_months   )
+      months_tab  ), oem_price_cte as(  select    Model_Code   ,
+      Upload_Description   , Continent   , Country   , Region   , State   ,
+      City   , Year   , Basic_Sales_Price_inc_Tool_Kit as net_basic   ,
+      Development_Cost   , case when initcap(trim(month)) in ('Apr', 'April')
+      then 'Apr'     when initcap(trim(month)) in ('May') then 'May'    when
+      initcap(trim(month)) in ('Jun', 'June') then 'Jun'     when
+      initcap(trim(month)) in ('Jul', 'July') then 'Jul'     when
+      initcap(trim(month)) in ('Aug', 'August') then 'Aug'     when
+      initcap(trim(month)) in ('Sep', 'September') then 'Sep'     when
+      initcap(trim(month)) in ('Oct', 'October') then 'Oct'     when
+      initcap(trim(month)) in ('Nov', 'November') then 'Nov'     when
+      initcap(trim(month)) in ('Dec', 'December') then 'Dec'     when
+      initcap(trim(month)) in ('Jan', 'January') then 'Jan'     when
+      initcap(trim(month)) in ('Feb', 'February') then 'Feb'     when
+      initcap(trim(month)) in ('Mar', 'March') then 'Mar'     end as
+      month  FROM   oem_price  ), propagation_tab as (  select
+      row_gen_months.model_code   , row_gen_months.upload_description   ,
+      row_gen_months.month_name as month   , last_value(oem_price.month, True)
+      over (partition by row_gen_months.model_code,
+      row_gen_months.upload_description order by row_gen_months.month_seq)
+      proagation_month  from    ((select distinct model_code, upload_description
+      from oem_price_cte) as oem_price   cross join    month_cte   )
+      row_gen_months   left join   oem_price_cte
+      oem_price   on  oem_price.model_code = row_gen_months.model_code    AND
+      oem_price.upload_description = row_gen_months.upload_description    AND
+      oem_price.month = row_gen_months.month_name  )
+      select   oem_price.Model_Code  , oem_price.Upload_Description  ,
+      oem_price.Continent  , oem_price.Country  , oem_price.Region  ,
+      oem_price.State  , oem_price.City  , oem_price.Year  ,
+      oem_price.net_basic  , oem_price.Development_Cost  , propagation_tab.month
+      from  oem_price_cte as oem_price inner join  propagation_tab ON
+      oem_price.model_code = propagation_tab.model_code  AND
+      oem_price.upload_description = propagation_tab.upload_description  AND
+      oem_price.month = propagation_tab.proagation_month
+    optional:
+      persistDataFrame: false
+      loggingOptions:
+        printSchema: true
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
+outputPort:
+  subscriptionChannels:
+    - channelType: Postgres
+      queryType: SQL
+    - channelType: Dataproduct
+      queryType: SQL
