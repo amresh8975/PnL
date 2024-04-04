@@ -1,4 +1,4 @@
-version: 0.0.9
+version: 0.0.10
 jobId: "1156"
 jobName: PnL OEM Price
 jobType: Source Aligned Data Product
@@ -23,7 +23,63 @@ productState:
   isDynamic: true
   alias: load
   retentionVersions: ""
-  logicalSchema: ""
+  logicalSchema:
+    properties:
+      model_code:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      upload_description:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      continent:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      country:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      region:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      state:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      city:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      year:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      net_basic:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      development_cost:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      month:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
