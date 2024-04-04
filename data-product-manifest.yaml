@@ -1,11 +1,11 @@
-version: 0.0.5
+version: 0.0.6
 jobId: "1157"
-jobName: PnL JPY Export Price
+jobName: PnL JPY Export Sales Price
 jobType: Source Aligned Data Product
 domain: finance
 alias: load_to_tgt
 discoveryPort:
-  name: PnL JPY Export Price
+  name: PnL JPY Export Sales Price
 inputPorts:
   - alias: JPY_Price_1
     isDynamic: true
@@ -23,7 +23,93 @@ productState:
   isDynamic: true
   alias: load_to_tgt
   retentionVersions: ""
-  logicalSchema: ""
+  logicalSchema:
+    properties:
+      model_code:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      upload_description:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      continent:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      country:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      region:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      state:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      city:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      group_non_group:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      trade_type:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      port:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      currency:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      year:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      cost:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      capacity_cost_adj:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      material_cost_adj:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      proposed_margin_rate:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      month:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
