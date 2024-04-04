@@ -1,0 +1,94 @@
+version: 0.0.1
+jobId: "1169"
+jobName: PnL Sales And Discounts
+jobType: Aggregated Data Product
+domain: finance
+alias: ""
+discoveryPort:
+  name: PnL Sales And Discounts
+inputPorts:
+  - alias: Budget_Volume_1
+    isDynamic: true
+    dataProductUrn: urn:dv:dataproduct:5e1bb1af-7c77-4644-9a8a-2d6ef426d276
+    filter: ""
+    projection: ""
+    optional:
+      persistDataFrame: false
+    type: dataproduct
+  - alias: Domestic_Sales_Price_1
+    isDynamic: true
+    dataProductUrn: urn:dv:dataproduct:da150885-ce6d-4ecd-8f1c-b682929d997f
+    filter: ""
+    projection: ""
+    optional:
+      persistDataFrame: false
+    type: dataproduct
+  - alias: OEM_Sales_Price_1
+    isDynamic: true
+    dataProductUrn: urn:dv:dataproduct:99232ccf-bf32-4c11-9129-1f0379ea6809
+    filter: ""
+    projection: ""
+    optional:
+      persistDataFrame: false
+    type: dataproduct
+  - alias: JPY_Export_Sales_Price_1
+    isDynamic: true
+    dataProductUrn: urn:dv:dataproduct:e1b3ee39-4491-4271-b06a-b187df6ad320
+    filter: ""
+    projection: ""
+    optional:
+      persistDataFrame: false
+    type: dataproduct
+  - alias: Non_JPY_Export_Sales_Price_1
+    isDynamic: true
+    dataProductUrn: urn:dv:dataproduct:6d9ec99f-78d4-4b69-b293-72ed0486683a
+    filter: ""
+    projection: ""
+    optional:
+      persistDataFrame: false
+    type: dataproduct
+productState:
+  isDynamic: true
+  alias: ""
+  retentionVersions: ""
+  logicalSchema: ""
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  tableName: ""
+  warehousePath: ""
+  catalogName: ""
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: true
+    enforceSchemaMethod: Warning
+    catalogType: glue
+  refreshInterval: None
+transformation:
+  - isDynamic: true
+    alias: Spark_SQL_1
+    description: join SADP
+    sequence: 6
+    inputDataFrameList:
+      - inputDataFrame: Budget_Volume_1
+        tempViewName: volume
+      - inputDataFrame: Domestic_Sales_Price_1
+        tempViewName: domestic_price
+      - inputDataFrame: OEM_Sales_Price_1
+        tempViewName: oem_price
+      - inputDataFrame: JPY_Export_Sales_Price_1
+        tempViewName: jpy_export_price
+      - inputDataFrame: Non_JPY_Export_Sales_Price_1
+        tempViewName: non_jpy_export_price
+    query: ""
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
+outputPort:
+  subscriptionChannels:
+    - channelType: Postgres
+      queryType: SQL
+    - channelType: Dataproduct
+      queryType: SQL
