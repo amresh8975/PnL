@@ -1,11 +1,11 @@
-version: 0.0.33
+version: 0.0.34
 jobId: "1148"
-jobName: PnL Domestic Sales Price
+jobName: Domestic Sales Price
 jobType: Source Aligned Data Product
 domain: finance
 alias: load_to_target
 discoveryPort:
-  name: PnL Domestic Sales Price
+  name: Domestic Sales Price
 inputPorts:
   - alias: Domestic_Price_1
     isDynamic: true
