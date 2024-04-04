@@ -1,4 +1,4 @@
-version: 0.0.14
+version: 0.0.15
 jobId: "1168"
 jobName: Non JPY Export Sales Price
 jobType: Source Aligned Data Product
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
 productState:
   isDynamic: true
-  alias: load_non-jpy_export_price
+  alias: load_non_jpy_export_price
   retentionVersions: ""
   logicalSchema:
     properties:
