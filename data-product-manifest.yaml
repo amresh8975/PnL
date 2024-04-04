@@ -1,9 +1,9 @@
-version: 0.0.2
+version: 0.0.3
 jobId: "1169"
 jobName: PnL Sales And Discounts
 jobType: Aggregated Data Product
 domain: finance
-alias: ""
+alias: load_to_ADP
 discoveryPort:
   name: PnL Sales And Discounts
 inputPorts:
@@ -49,20 +49,21 @@ inputPorts:
     type: dataproduct
 productState:
   isDynamic: true
-  alias: ""
+  alias: load_to_ADP
   retentionVersions: ""
   logicalSchema: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
-  tableName: ""
-  warehousePath: ""
-  catalogName: ""
+  updateStrategy: Overwrite
+  tableName: msil_dataverse_finance_catalog.sales_and_discounts
+  warehousePath: /data/iceberg_warehouse
+  catalogName: postgres
   optional:
     persistDataFrame: false
     enableDataReconciliation: false
-    enforceSchema: true
+    enforceSchema: false
     enforceSchemaMethod: Warning
-    catalogType: glue
+    catalogType: postgres
   refreshInterval: None
 transformation:
   - isDynamic: true
