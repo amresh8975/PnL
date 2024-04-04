@@ -1,11 +1,11 @@
-version: 0.0.10
+version: 0.0.11
 jobId: "1156"
-jobName: PnL OEM Price
+jobName: PnL OEM Sales Price
 jobType: Source Aligned Data Product
 domain: finance
 alias: load
 discoveryPort:
-  name: PnL OEM Price
+  name: PnL OEM Sales Price
 inputPorts:
   - alias: OEM_Price_1
     isDynamic: true
