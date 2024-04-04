@@ -1,0 +1,110 @@
+version: 0.0.4
+jobId: "1170"
+jobName: PNL_Volume
+jobType: Source Aligned Data Product
+domain: finance
+alias: Load_Iceberg_PnL_Volume
+discoveryPort:
+  name: PNL_Volume
+inputPorts:
+  - alias: Volume__1
+    isDynamic: true
+    path: /data/PnL/Output/Sales/Volume/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Finance On-Prem Connectivity
+      dataSetUrn: urn:dv:dataset:dfb72bb0-df15-4117-a1c8-4bb738eb2838
+    type: inputDelimited
+  - alias: Product_Master_1
+    isDynamic: true
+    path: /data/PnL/Output/Sales/ProductMaster/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Finance On-Prem Connectivity
+      dataSetUrn: urn:dv:dataset:f496030b-81d3-4889-a8f6-81936b4265c1
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: Load_Iceberg_PnL_Volume
+  retentionVersions: ""
+  logicalSchema: ""
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: msil_dataverse_finance_catalog.VolumeData
+  warehousePath: /data/iceberg_warehouse
+  catalogName: postgres
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: postgres
+  refreshInterval: None
+transformation:
+  - isDynamic: true
+    alias: Spark_SQL_1
+    description: Sql Transformation
+    sequence: 3
+    inputDataFrameList:
+      - inputDataFrame: Volume__1
+        tempViewName: Volume
+      - inputDataFrame: Product_Master_1
+        tempViewName: ProductMaster
+    query: SELECT      V.Model_Code,      V.Upload_Description,      V.Continent,      V.Country,      V.Region,      V.State,      V.City,      V.Group_Non_Group,      V.Trade_Type,      V.Port,      V.Currency,      V.Month,      V.Volume,     P.Group
+      AS
+      Product_Group,     P.Model_Name,     P.Model_Variant,     P.Upload_Description
+      AS
+      Product_Upload_Description,     P.Variant_Code,     P.Variant_Name,     P.Market,     P.Channel,     P.TM,     P.Fuel,     P.Engine_Capacity,     P.Seating_Capacity,     P.Plant  From  (  SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Apr"
+      AS Month,   Apr AS Volume  FROM    Volume     UNION
+      ALL  SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "May"
+      AS Month,   May AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Jun"
+      AS Month,   Jun AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Jul"
+      AS Month,   Jul AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Aug"
+      AS Month,   Aug AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Sep"
+      AS Month,   Sep AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Oct"
+      AS Month,   Oct AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Dec"
+      AS Month,   Dec AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Jan"
+      AS Month,   Jan AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Feb"
+      AS Month,   Feb AS Volume  FROM    Volume     UNION
+      ALL    SELECT    Model_Code,    Upload_Description
+      ,    Continent,    Country,    Region,    State,    City,    Group_Non_Group,    Trade_Type,    Port,    Currency,    "Mar"
+      AS Month,   Mar AS Volume  FROM    Volume  ) AS V LEFT
+      JOIN      ProductMaster AS P  ON      V.Model_Code = P.Model_Code ;
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
+outputPort:
+  subscriptionChannels:
+    - channelType: Postgres
+      queryType: SQL
+    - channelType: Dataproduct
+      queryType: SQL
