@@ -1,11 +1,11 @@
-version: 0.0.4
+version: 0.0.5
 jobId: "1170"
-jobName: PNL_Volume
+jobName: Budget Volume
 jobType: Source Aligned Data Product
 domain: finance
 alias: Load_Iceberg_PnL_Volume
 discoveryPort:
-  name: PNL_Volume
+  name: Budget Volume
 inputPorts:
   - alias: Volume__1
     isDynamic: true
