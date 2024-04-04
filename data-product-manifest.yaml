@@ -1,4 +1,4 @@
-version: 0.0.1
+version: 0.0.2
 jobId: "1169"
 jobName: PnL Sales And Discounts
 jobType: Aggregated Data Product
@@ -71,7 +71,7 @@ transformation:
     sequence: 6
     inputDataFrameList:
       - inputDataFrame: Budget_Volume_1
-        tempViewName: volume
+        tempViewName: budget_volume
       - inputDataFrame: Domestic_Sales_Price_1
         tempViewName: domestic_price
       - inputDataFrame: OEM_Sales_Price_1
@@ -80,7 +80,85 @@ transformation:
         tempViewName: jpy_export_price
       - inputDataFrame: Non_JPY_Export_Sales_Price_1
         tempViewName: non_jpy_export_price
-    query: ""
+    query: WITH sales_price_cte as ( select  model_code  , upload_description  ,
+      'Domestic' as market  , continent  , country  , region  , state  , city  ,
+      year  , net_basic  , strategic_price  , change_h2_per  , change_h2_abs  ,
+      change_budget_per  , change_budget_abs  , discount  , month  , NULL as
+      development_cost  , NULL as group_non_group  , NULL as trade_type  , NULL
+      as port  , NULL as currency  , NULL as cost  , NULL as
+      capacity_cost_adj  , NULL as material_cost_adj  , NULL as
+      proposed_margin_rate  , NULL as fob  , NULL as fob_exchange_rate  , NULL
+      as budgeted_exchange_rate  , NULL as price_change_sp_per  , NULL as
+      price_change_sp_abs  , NULL as price_change_er_per  , NULL as
+      price_change_er_abs FROM domestic_price UNION ALL SELECT  model_code  ,
+      upload_description  , 'Domestic - OEM' as market  , continent  ,
+      country  , region  , state  , city  , year  , net_basic  , NULL as
+      strategic_price  , NULL as change_h2_per  , NULL as change_h2_abs  , NULL
+      as change_budget_per  , NULL as change_budget_abs  , NULL as discount   ,
+      month  , development_cost  , NULL as group_non_group  , NULL as
+      trade_type  , NULL as port  , NULL as currency  , NULL as cost  , NULL as
+      capacity_cost_adj  , NULL as material_cost_adj  , NULL as
+      proposed_margin_rate  , NULL as fob  , NULL as fob_exchange_rate  , NULL
+      as budgeted_exchange_rate  , NULL as price_change_sp_per  , NULL as
+      price_change_sp_abs  , NULL as price_change_er_per  , NULL as
+      price_change_er_abs FROM oem_price UNION ALL SELECT   model_code  ,
+      upload_description  , upper(currency) as market  , continent  , country  ,
+      region  , state  , city  , year  , NULL as net_basic  , NULL as
+      strategic_price  , NULL as change_h2_per  , NULL as change_h2_abs  , NULL
+      as change_budget_per  , NULL as change_budget_abs  , NULL as discount   ,
+      month  , NULL as development_cost  , group_non_group  , trade_type  ,
+      port  , currency  , cost  , capacity_cost_adj  , material_cost_adj  ,
+      proposed_margin_rate  , NULL as fob  , NULL as fob_exchange_rate  , NULL
+      as budgeted_exchange_rate  , NULL as price_change_sp_per  , NULL as
+      price_change_sp_abs  , NULL as price_change_er_per  , NULL as
+      price_change_er_abs FROM jpy_export_price UNION ALL SELECT   model_code  ,
+      upload_description  , upper(currency) as market  , continent  , country  ,
+      region  , state  , city  , year  , NULL as net_basic  , NULL as
+      strategic_price  , NULL as change_h2_per  , NULL as change_h2_abs  , NULL
+      as change_budget_per  , NULL as change_budget_abs  , NULL as discount   ,
+      month  , NULL as development_cost  , group_non_group  , trade_type  ,
+      port  , currency  , NULL as cost  , NULL as capacity_cost_adj  , NULL as
+      material_cost_adj  , NULL as proposed_margin_rate  , fob  ,
+      fob_exchange_rate  , budgeted_exchange_rate  , price_change_sp_per  ,
+      price_change_sp_abs  , price_change_er_per  , price_change_er_abs FROM
+      non_jpy_export_price SELECT  COALESCE(sales_price_cte.model_code,
+      budget_volume.model_code) as model_code  ,
+      COALESCE(sales_price_cte.upload_description,
+      budget_volume.upload_description) as upload_description  ,
+      COALESCE(sales_price_cte.market, budget_volume.market) as market  ,
+      COALESCE(sales_price_cte.continent, budget_volume.continent) as
+      continent  , COALESCE(sales_price_cte.country, budget_volume.country) as
+      country  , COALESCE(sales_price_cte.region, budget_volume.region) as
+      region  , COALESCE(sales_price_cte.state, budget_volume.state) as state  ,
+      COALESCE(sales_price_cte.city, budget_volume.city) as city  ,
+      sales_price_cte.year  , budget_volume.volume  ,
+      sales_price_cte.net_basic  , sales_price_cte.strategic_price  ,
+      sales_price_cte.change_h2_per  , sales_price_cte.change_h2_abs  ,
+      sales_price_cte.change_budget_per  , sales_price_cte.change_budget_abs  ,
+      sales_price_cte.discount  , COALESCE(sales_price_cte.month,
+      budget_volume.month) as month  , sales_price_cte.development_cost  ,
+      COALESCE(sales_price_cte.group_non_group, budget_volume.group_non_group)
+      as group_non_group  , COALESCE(sales_price_cte.trade_type,
+      budget_volume.trade_type) as trade_type  , COALESCE(sales_price_cte.port,
+      budget_volume.port) as port  , COALESCE(sales_price_cte.currency,
+      budget_volume.currency) as currency  , sales_price_cte.cost  ,
+      sales_price_cte.capacity_cost_adj  , sales_price_cte.material_cost_adj  ,
+      sales_price_cte.proposed_margin_rate  , sales_price_cte.fob  ,
+      sales_price_cte.fob_exchange_rate  ,
+      sales_price_cte.budgeted_exchange_rate  ,
+      sales_price_cte.price_change_sp_per  ,
+      sales_price_cte.price_change_sp_abs  ,
+      sales_price_cte.price_change_er_per  ,
+      sales_price_cte.price_change_er_abs  , budget_volume.product_group  ,
+      budget_volume.model_name  , budget_volume.model_variant  ,
+      budget_volume.product_upload_description  , budget_volume.variant_code  ,
+      budget_volume.variant_name  , budget_volume.channel  , budget_volume.tm  ,
+      budget_volume.fuel  , budget_volume.engine_capacity  ,
+      budget_volume.seating_capacity  , budget_volume.plant FROM  budget_volume
+      INNER JOIN  sales_price_cte ON budget_volume.model_code =
+      sales_price_cte.model_code  AND budget_volume.upload_description =
+      sales_price_cte.upload_description  AND budget_volume.month =
+      sales_price_cte.month  AND budget_volume.market = sales_price_cte.market
     optional:
       persistDataFrame: false
     type: operationThroughSqlQuery
