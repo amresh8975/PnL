@@ -1,4 +1,4 @@
-version: 0.0.34
+version: 0.0.35
 jobId: "1148"
 jobName: Domestic Sales Price
 jobType: Source Aligned Data Product
@@ -108,7 +108,7 @@ productState:
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
-  tableName: msil_dataverse_finance_catalog.dometic_price_monthly
+  tableName: msil_dataverse_finance_catalog.domestic_sales_price_monthly
   warehousePath: /data/iceberg_warehouse
   catalogName: postgres
   optional:
