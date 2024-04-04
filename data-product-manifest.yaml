@@ -3,7 +3,7 @@ jobId: "1168"
 jobName: PnL Non JPY Export Sales Price
 jobType: Source Aligned Data Product
 domain: finance
-alias: load_to_tgt
+alias: load to tgt
 discoveryPort:
   name: PnL Non JPY Export Sales Price
 inputPorts:
