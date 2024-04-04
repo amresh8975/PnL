@@ -1,11 +1,11 @@
-version: 0.0.13
+version: 0.0.14
 jobId: "1168"
-jobName: PnL Non JPY Export Sales Price
+jobName: Non JPY Export Sales Price
 jobType: Source Aligned Data Product
 domain: finance
-alias: load_to_tgt1
+alias: load_non-jpy_export_price
 discoveryPort:
-  name: PnL Non JPY Export Sales Price
+  name: Non JPY Export Sales Price
 inputPorts:
   - alias: Non_JPY_Price_1
     isDynamic: true
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
 productState:
   isDynamic: true
-  alias: load_to_tgt
+  alias: load_non-jpy_export_price
   retentionVersions: ""
   logicalSchema:
     properties:
