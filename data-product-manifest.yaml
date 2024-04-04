@@ -1,4 +1,4 @@
-version: 0.0.5
+version: 0.0.6
 jobId: "1170"
 jobName: Budget Volume
 jobType: Source Aligned Data Product
@@ -35,7 +35,86 @@ productState:
   isDynamic: true
   alias: Load_Iceberg_PnL_Volume
   retentionVersions: ""
-  logicalSchema: ""
+  logicalSchema:
+    properties:
+      "Model_Code ":
+        type: STRING
+        description: ""
+      "Upload_Description ":
+        type: STRING
+        description: ""
+      "Continent ":
+        type: STRING
+        description: ""
+      "Country ":
+        type: STRING
+        description: ""
+      "Region ":
+        type: STRING
+        description: ""
+      "State ":
+        type: STRING
+        description: ""
+      "City ":
+        type: STRING
+        description: ""
+      "Group_Non_Group ":
+        type: STRING
+        description: ""
+      "Trade_Type ":
+        type: STRING
+        description: ""
+      "Port ":
+        type: STRING
+        description: ""
+      "Currency ":
+        type: STRING
+        description: ""
+      "Month ":
+        type: STRING
+        description: ""
+      Volume:
+        type: STRING
+        description: ""
+      Product_Group:
+        type: STRING
+        description: ""
+      Model_Name:
+        type: STRING
+        description: ""
+      Model_Variant:
+        type: STRING
+        description: ""
+      Product_Upload_Description:
+        type: STRING
+        description: ""
+      Variant_Code:
+        type: STRING
+        description: ""
+      Variant_Name:
+        type: STRING
+        description: ""
+      Market:
+        type: STRING
+        description: ""
+      Channel:
+        type: STRING
+        description: ""
+      TM:
+        type: STRING
+        description: ""
+      Fuel:
+        type: STRING
+        description: ""
+      Engine_Capacity:
+        type: STRING
+        description: ""
+      Seating_Capacity:
+        type: STRING
+        description: ""
+      Plant:
+        type: STRING
+        description: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
