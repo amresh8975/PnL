@@ -3,7 +3,7 @@ jobId: "1168"
 jobName: Non JPY Export Sales Price
 jobType: Source Aligned Data Product
 domain: finance
-alias: load_non-jpy_export_price
+alias: load_non_jpy_export_price
 discoveryPort:
   name: Non JPY Export Sales Price
 inputPorts:
