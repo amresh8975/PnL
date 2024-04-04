@@ -1,11 +1,11 @@
-version: 0.0.11
+version: 0.0.12
 jobId: "1168"
-jobName: PnL Non JPY Export Price
+jobName: PnL Non JPY Export Sales Price
 jobType: Source Aligned Data Product
 domain: finance
 alias: load_to_tgt
 discoveryPort:
-  name: PnL Non JPY Export Price
+  name: PnL Non JPY Export Sales Price
 inputPorts:
   - alias: Non_JPY_Price_1
     isDynamic: true
@@ -23,7 +23,108 @@ productState:
   isDynamic: true
   alias: load_to_tgt
   retentionVersions: ""
-  logicalSchema: ""
+  logicalSchema:
+    properties:
+      model_code:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      upload_description:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      continent:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      country:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      region:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      state:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      city:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      group_non_group:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      trade_type:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      port:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      currency:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      year:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      fob:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      fob_exchange_rate:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      budgeted_exchange_rate:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      price_change_sp_per:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      price_change_sp_abs:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      price_change_er_per:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      price_change_er_abs:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
+      month:
+        type: STRING
+        description: ""
+        sourceColumn: ""
+        sourceTable: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
