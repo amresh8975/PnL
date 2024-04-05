@@ -1,0 +1,103 @@
+version: 0.0.4
+jobId: "1175"
+jobName: Product Master
+jobType: Source Aligned Data Product
+domain: finance
+alias: load_to_target
+discoveryPort:
+  name: Product Master
+inputPorts:
+  - alias: Product_Master_1
+    isDynamic: true
+    path: /data/PnL/Output/Sales/ProductMaster/
+    optional:
+      persistDataFrame: false
+      advanceOptions:
+        delimiter: ","
+      enableDataReconciliation: false
+      enforceSchema: false
+      connection: Finance On-Prem Connectivity
+      dataSetUrn: urn:dv:dataset:f496030b-81d3-4889-a8f6-81936b4265c1
+    type: inputDelimited
+productState:
+  isDynamic: true
+  alias: load_to_target
+  retentionVersions: ""
+  logicalSchema:
+    properties:
+      Product_Group:
+        type: STRING
+        description: ""
+      Model_Name:
+        type: STRING
+        description: ""
+      Model_Variant:
+        type: STRING
+        description: ""
+      Model_Code:
+        type: STRING
+        description: ""
+      Upload_Description:
+        type: STRING
+        description: ""
+      Variant_Code:
+        type: STRING
+        description: ""
+      Variant_Name:
+        type: STRING
+        description: ""
+      Market:
+        type: STRING
+        description: ""
+      Channel:
+        type: STRING
+        description: ""
+      TM:
+        type: STRING
+        description: ""
+      Fuel:
+        type: STRING
+        description: ""
+      Engine_Capacity:
+        type: STRING
+        description: ""
+      Seating_Capacity:
+        type: STRING
+        description: ""
+      Plant:
+        type: STRING
+        description: ""
+  stateStoreType: loadDataIceberg
+  isProfilingEnabled: false
+  updateStrategy: Overwrite
+  tableName: msil_dataverse_finance_catalog.product_master
+  warehousePath: /data/iceberg_warehouse
+  catalogName: postgres
+  optional:
+    persistDataFrame: false
+    enableDataReconciliation: false
+    enforceSchema: false
+    enforceSchemaMethod: Warning
+    catalogType: postgres
+  refreshInterval: None
+transformation:
+  - isDynamic: true
+    alias: Spark_SQL_1
+    description: Read product master data
+    sequence: 2
+    inputDataFrameList:
+      - inputDataFrame: Product_Master_1
+        tempViewName: product_master
+    query: SELECT      group,      model_name,      model_variant,      model_code,      upload_description,     variant_code,      variant_name,      market,      channel,      tm,      fuel,      engine_capacity,     seating_capacity,      plant
+      FROM      PRODUCT_MASTER;
+    optional:
+      persistDataFrame: false
+    type: operationThroughSqlQuery
+controlPort:
+  dataQualityRules: {}
+outputPort:
+  subscriptionChannels:
+    - channelType: Postgres
+      queryType: SQL
+    - channelType: Dataproduct
+      queryType: SQL
