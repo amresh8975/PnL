@@ -1,9 +1,9 @@
-version: 0.0.4
+version: 0.0.5
 jobId: "1175"
 jobName: Product Master
 jobType: Source Aligned Data Product
 domain: finance
-alias: load_to_target
+alias: load_to_product_master
 discoveryPort:
   name: Product Master
 inputPorts:
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
 productState:
   isDynamic: true
-  alias: load_to_target
+  alias: load_to_product_master
   retentionVersions: ""
   logicalSchema:
     properties:
