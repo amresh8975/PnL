@@ -1,4 +1,4 @@
-version: 0.0.10
+version: 0.0.15
 jobId: "1170"
 jobName: Sales Volume
 jobType: Source Aligned Data Product
@@ -62,6 +62,18 @@ productState:
         type: STRING
         description: ""
       Volume:
+        type: STRING
+        description: ""
+      etl_inserted_date:
+        type: STRING
+        description: ""
+      etl_modified_date:
+        type: STRING
+        description: ""
+      etl_created_by:
+        type: STRING
+        description: ""
+      etl_updated_by:
         type: STRING
         description: ""
   stateStoreType: loadDataIceberg
