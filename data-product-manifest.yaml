@@ -1,4 +1,4 @@
-version: 0.0.7
+version: 0.0.10
 jobId: "1157"
 jobName: JPY Export Sales Price
 jobType: Source Aligned Data Product
@@ -110,6 +110,18 @@ productState:
         description: ""
         sourceColumn: ""
         sourceTable: ""
+      etl_inserted_date:
+        type: STRING
+        description: ""
+      etl_modified_date:
+        type: STRING
+        description: ""
+      etl_created_by:
+        type: STRING
+        description: ""
+      etl_updated_by:
+        type: STRING
+        description: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
@@ -131,57 +143,63 @@ transformation:
     inputDataFrameList:
       - inputDataFrame: JPY_Price_1
         tempViewName: export_jpy_price
-    query: with month_cte as(  select all_months.col1 as month_name, all_months.col2
-      as month_seq  from (   select explode(array(("Apr", 1), ("May", 2),
-      ("Jun", 3), ("Jul", 4), ("Aug", 5), ("Sep", 6), ("Oct", 7), ("Nov", 8),
-      ("Dec", 9), ("Jan", 10), ("Feb", 11), ("Mar", 12))) as all_months   )
-      months_tab  ), export_jpy_price_cte as(  select    model_code   ,
-      upload_description   , continent   , country   , region   , state   ,
-      city   , Group_Non_Group   , trade_type   , port   , currency   , year   ,
-      cost   , capacity_cost_adj   , material_cost_adj   ,
-      proposed_margin_rate   , case when initcap(trim(month)) in ('Apr',
-      'April') then 'Apr'     when initcap(trim(month)) in ('May') then
-      'May'    when initcap(trim(month)) in ('Jun', 'June') then 'Jun'     when
-      initcap(trim(month)) in ('Jul', 'July') then 'Jul'     when
-      initcap(trim(month)) in ('Aug', 'August') then 'Aug'     when
-      initcap(trim(month)) in ('Sep', 'September') then 'Sep'     when
-      initcap(trim(month)) in ('Oct', 'October') then 'Oct'     when
-      initcap(trim(month)) in ('Nov', 'November') then 'Nov'     when
-      initcap(trim(month)) in ('Dec', 'December') then 'Dec'     when
-      initcap(trim(month)) in ('Jan', 'January') then 'Jan'     when
-      initcap(trim(month)) in ('Feb', 'February') then 'Feb'     when
-      initcap(trim(month)) in ('Mar', 'March') then 'Mar'     end as
-      month  FROM   export_jpy_price  ), propagation_tab as (  select
-      row_gen_months.model_code   , row_gen_months.upload_description   ,
-      row_gen_months.month_name as month   , last_value(export_jpy_price.month,
-      True) over (partition by row_gen_months.model_code,
-      row_gen_months.upload_description order by row_gen_months.month_seq)
-      proagation_month  from    ((select distinct model_code, upload_description
-      from export_jpy_price_cte) as export_jpy_price   cross
-      join    month_cte   ) row_gen_months   left join   export_jpy_price_cte
-      export_jpy_price   on  export_jpy_price.model_code =
-      row_gen_months.model_code    AND export_jpy_price.upload_description =
-      row_gen_months.upload_description    AND export_jpy_price.month =
-      row_gen_months.month_name  ) select   export_jpy_price.model_code  ,
-      export_jpy_price.upload_description  , export_jpy_price.continent  ,
-      export_jpy_price.country  , export_jpy_price.region  ,
-      export_jpy_price.state  , export_jpy_price.city  ,
-      export_jpy_price.Group_Non_Group  , export_jpy_price.trade_type  ,
-      export_jpy_price.port  , export_jpy_price.currency  ,
-      export_jpy_price.year  , export_jpy_price.cost  ,
-      export_jpy_price.capacity_cost_adj  ,
-      export_jpy_price.material_cost_adj  ,
-      export_jpy_price.proposed_margin_rate  , propagation_tab.month
-      from  export_jpy_price_cte as export_jpy_price inner join  propagation_tab
-      ON export_jpy_price.model_code = propagation_tab.model_code  AND
-      export_jpy_price.upload_description =
+    query: WITH month_cte AS( SELECT  all_months.col1 AS
+      month_name,  all_months.col2 AS month_seq
+      FROM  (  SELECT   explode(ARRAY(("Apr",   1),   ("May",   2),   ("Jun",   3),   ("Jul",   4),   ("Aug",   5),   ("Sep",   6),   ("Oct",   7),   ("Nov",   8),   ("Dec",   9),   ("Jan",   10),   ("Feb",   11),   ("Mar",   12)))
+      AS all_months ) months_tab ), export_jpy_price_cte AS( SELECT  model_code
+      ,  upload_description ,  continent ,  country ,  region ,  state ,  city
+      ,  Group_Non_Group ,  trade_type ,  port ,  currency ,  YEAR ,  cost
+      ,  capacity_cost_adj ,  material_cost_adj ,  proposed_margin_rate
+      ,  CASE   WHEN initcap(trim(MONTH)) IN ('Apr', 'April') THEN 'Apr'   WHEN
+      initcap(trim(MONTH)) IN ('May') THEN 'May'   WHEN initcap(trim(MONTH)) IN
+      ('Jun', 'June') THEN 'Jun'   WHEN initcap(trim(MONTH)) IN ('Jul', 'July')
+      THEN 'Jul'   WHEN initcap(trim(MONTH)) IN ('Aug', 'August') THEN
+      'Aug'   WHEN initcap(trim(MONTH)) IN ('Sep', 'September') THEN
+      'Sep'   WHEN initcap(trim(MONTH)) IN ('Oct', 'October') THEN 'Oct'   WHEN
+      initcap(trim(MONTH)) IN ('Nov', 'November') THEN 'Nov'   WHEN
+      initcap(trim(MONTH)) IN ('Dec', 'December') THEN 'Dec'   WHEN
+      initcap(trim(MONTH)) IN ('Jan', 'January') THEN 'Jan'   WHEN
+      initcap(trim(MONTH)) IN ('Feb', 'February') THEN 'Feb'   WHEN
+      initcap(trim(MONTH)) IN ('Mar', 'March') THEN 'Mar'  END AS MONTH
+      FROM  export_jpy_price ), propagation_tab AS (
+      SELECT  row_gen_months.model_code ,  row_gen_months.upload_description
+      ,  row_gen_months.month_name AS MONTH
+      ,  last_value(export_jpy_price.month,  TRUE) OVER (PARTITION BY
+      row_gen_months.model_code,  row_gen_months.upload_description ORDER
+      BY  row_gen_months.month_seq) proagation_month FROM  ((  SELECT   DISTINCT
+      model_code,   upload_description  FROM   export_jpy_price_cte) AS
+      export_jpy_price CROSS JOIN month_cte ) row_gen_months LEFT JOIN
+      export_jpy_price_cte export_jpy_price ON  export_jpy_price.model_code =
+      row_gen_months.model_code  AND export_jpy_price.upload_description =
+      row_gen_months.upload_description  AND export_jpy_price.month =
+      row_gen_months.month_name ) SELECT  export_jpy_price.model_code
+      ,  export_jpy_price.upload_description ,  export_jpy_price.continent
+      ,  export_jpy_price.country ,  export_jpy_price.region
+      ,  export_jpy_price.state ,  export_jpy_price.city
+      ,  export_jpy_price.Group_Non_Group ,  export_jpy_price.trade_type
+      ,  export_jpy_price.port ,  export_jpy_price.currency
+      ,  export_jpy_price.year ,  export_jpy_price.cost
+      ,  export_jpy_price.capacity_cost_adj
+      ,  export_jpy_price.material_cost_adj
+      ,  export_jpy_price.proposed_margin_rate
+      ,  propagation_tab.MONTH,  current_timestamp() AS
+      etl_inserted_date,  current_timestamp() AS
+      etl_modified_date,  'platform_admin' AS etl_created_by,  'platform_admin'
+      AS etl_updated_by FROM  export_jpy_price_cte AS export_jpy_price INNER
+      JOIN propagation_tab ON  export_jpy_price.model_code =
+      propagation_tab.model_code  AND export_jpy_price.upload_description =
       propagation_tab.upload_description  AND export_jpy_price.month =
       propagation_tab.proagation_month
     optional:
       persistDataFrame: false
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: model_code
+        referenceAlias: load_to_tgt
 outputPort:
   subscriptionChannels:
     - channelType: Postgres
