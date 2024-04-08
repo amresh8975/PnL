@@ -1,4 +1,4 @@
-version: 0.0.5
+version: 0.0.8
 jobId: "1175"
 jobName: Product Master
 jobType: Source Aligned Data Product
@@ -67,6 +67,18 @@ productState:
       Plant:
         type: STRING
         description: ""
+      etl_inserted_date:
+        type: STRING
+        description: ""
+      etl_modified_date:
+        type: STRING
+        description: ""
+      etl_created_by:
+        type: STRING
+        description: ""
+      etl_updated_by:
+        type: STRING
+        description: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
@@ -88,13 +100,20 @@ transformation:
     inputDataFrameList:
       - inputDataFrame: Product_Master_1
         tempViewName: product_master
-    query: SELECT      group,      model_name,      model_variant,      model_code,      upload_description,     variant_code,      variant_name,      market,      channel,      tm,      fuel,      engine_capacity,     seating_capacity,      plant
-      FROM      PRODUCT_MASTER;
+    query: SELECT  GROUP,  model_name,  model_variant,  model_code,  upload_description,  variant_code,  variant_name,  market,  channel,  tm,  fuel,  engine_capacity,  seating_capacity,  plant,  current_timestamp()
+      AS etl_inserted_date,  current_timestamp() AS
+      etl_modified_date,  'platform_admin' AS etl_created_by,  'platform_admin'
+      AS etl_updated_by FROM  PRODUCT_MASTER;
     optional:
       persistDataFrame: false
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: model_code
+        referenceAlias: load_to_product_master
 outputPort:
   subscriptionChannels:
     - channelType: Postgres
