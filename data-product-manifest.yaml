@@ -1,4 +1,4 @@
-version: 0.0.12
+version: 0.0.15
 jobId: "1156"
 jobName: OEM Sales Price
 jobType: Source Aligned Data Product
@@ -80,6 +80,18 @@ productState:
         description: ""
         sourceColumn: ""
         sourceTable: ""
+      etl_inserted_date:
+        type: STRING
+        description: ""
+      etl_modified_date:
+        type: STRING
+        description: ""
+      etl_created_by:
+        type: STRING
+        description: ""
+      etl_updated_by:
+        type: STRING
+        description: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
@@ -101,42 +113,42 @@ transformation:
     inputDataFrameList:
       - inputDataFrame: OEM_Price_1
         tempViewName: oem_price
-    query: with month_cte as(  select all_months.col1 as month_name, all_months.col2
-      as month_seq  from (   select explode(array(("Apr", 1), ("May", 2),
-      ("Jun", 3), ("Jul", 4), ("Aug", 5), ("Sep", 6), ("Oct", 7), ("Nov", 8),
-      ("Dec", 9), ("Jan", 10), ("Feb", 11), ("Mar", 12))) as all_months   )
-      months_tab  ), oem_price_cte as(  select    Model_Code   ,
-      Upload_Description   , Continent   , Country   , Region   , State   ,
-      City   , Year   , Basic_Sales_Price_inc_Tool_Kit as net_basic   ,
-      Development_Cost   , case when initcap(trim(month)) in ('Apr', 'April')
-      then 'Apr'     when initcap(trim(month)) in ('May') then 'May'    when
-      initcap(trim(month)) in ('Jun', 'June') then 'Jun'     when
-      initcap(trim(month)) in ('Jul', 'July') then 'Jul'     when
-      initcap(trim(month)) in ('Aug', 'August') then 'Aug'     when
-      initcap(trim(month)) in ('Sep', 'September') then 'Sep'     when
-      initcap(trim(month)) in ('Oct', 'October') then 'Oct'     when
-      initcap(trim(month)) in ('Nov', 'November') then 'Nov'     when
-      initcap(trim(month)) in ('Dec', 'December') then 'Dec'     when
-      initcap(trim(month)) in ('Jan', 'January') then 'Jan'     when
-      initcap(trim(month)) in ('Feb', 'February') then 'Feb'     when
-      initcap(trim(month)) in ('Mar', 'March') then 'Mar'     end as
-      month  FROM   oem_price  ), propagation_tab as (  select
-      row_gen_months.model_code   , row_gen_months.upload_description   ,
-      row_gen_months.month_name as month   , last_value(oem_price.month, True)
-      over (partition by row_gen_months.model_code,
-      row_gen_months.upload_description order by row_gen_months.month_seq)
-      proagation_month  from    ((select distinct model_code, upload_description
-      from oem_price_cte) as oem_price   cross join    month_cte   )
-      row_gen_months   left join   oem_price_cte
-      oem_price   on  oem_price.model_code = row_gen_months.model_code    AND
-      oem_price.upload_description = row_gen_months.upload_description    AND
-      oem_price.month = row_gen_months.month_name  )
-      select   oem_price.Model_Code  , oem_price.Upload_Description  ,
-      oem_price.Continent  , oem_price.Country  , oem_price.Region  ,
-      oem_price.State  , oem_price.City  , oem_price.Year  ,
-      oem_price.net_basic  , oem_price.Development_Cost  , propagation_tab.month
-      from  oem_price_cte as oem_price inner join  propagation_tab ON
-      oem_price.model_code = propagation_tab.model_code  AND
+    query: WITH month_cte AS( SELECT  all_months.col1 AS
+      month_name,  all_months.col2 AS month_seq
+      FROM  (  SELECT   explode(ARRAY(("Apr",   1),   ("May",   2),   ("Jun",   3),   ("Jul",   4),   ("Aug",   5),   ("Sep",   6),   ("Oct",   7),   ("Nov",   8),   ("Dec",   9),   ("Jan",   10),   ("Feb",   11),   ("Mar",   12)))
+      AS all_months ) months_tab ), oem_price_cte AS( SELECT  Model_Code
+      ,  Upload_Description ,  Continent ,  Country ,  Region ,  State ,  City
+      ,  YEAR ,  Basic_Sales_Price_inc_Tool_Kit AS net_basic ,  Development_Cost
+      ,  CASE   WHEN initcap(trim(MONTH)) IN ('Apr', 'April') THEN 'Apr'   WHEN
+      initcap(trim(MONTH)) IN ('May') THEN 'May'   WHEN initcap(trim(MONTH)) IN
+      ('Jun', 'June') THEN 'Jun'   WHEN initcap(trim(MONTH)) IN ('Jul', 'July')
+      THEN 'Jul'   WHEN initcap(trim(MONTH)) IN ('Aug', 'August') THEN
+      'Aug'   WHEN initcap(trim(MONTH)) IN ('Sep', 'September') THEN
+      'Sep'   WHEN initcap(trim(MONTH)) IN ('Oct', 'October') THEN 'Oct'   WHEN
+      initcap(trim(MONTH)) IN ('Nov', 'November') THEN 'Nov'   WHEN
+      initcap(trim(MONTH)) IN ('Dec', 'December') THEN 'Dec'   WHEN
+      initcap(trim(MONTH)) IN ('Jan', 'January') THEN 'Jan'   WHEN
+      initcap(trim(MONTH)) IN ('Feb', 'February') THEN 'Feb'   WHEN
+      initcap(trim(MONTH)) IN ('Mar', 'March') THEN 'Mar'  END AS MONTH
+      FROM  oem_price ), propagation_tab AS ( SELECT  row_gen_months.model_code
+      ,  row_gen_months.upload_description ,  row_gen_months.month_name AS MONTH
+      ,  last_value(oem_price.month,  TRUE) OVER (PARTITION BY
+      row_gen_months.model_code,  row_gen_months.upload_description ORDER
+      BY  row_gen_months.month_seq) proagation_month FROM  ((  SELECT   DISTINCT
+      model_code,   upload_description  FROM   oem_price_cte) AS oem_price CROSS
+      JOIN month_cte ) row_gen_months LEFT JOIN oem_price_cte oem_price
+      ON  oem_price.model_code = row_gen_months.model_code  AND
+      oem_price.upload_description = row_gen_months.upload_description  AND
+      oem_price.month = row_gen_months.month_name ) SELECT  oem_price.Model_Code
+      ,  oem_price.Upload_Description ,  oem_price.Continent
+      ,  oem_price.Country ,  oem_price.Region ,  oem_price.State
+      ,  oem_price.City ,  oem_price.Year ,  oem_price.net_basic
+      ,  oem_price.Development_Cost
+      ,  propagation_tab.MONTH,  current_timestamp() AS
+      etl_inserted_date,  current_timestamp() AS
+      etl_modified_date,  'platform_admin' AS etl_created_by,  'platform_admin'
+      AS etl_updated_by FROM  oem_price_cte AS oem_price INNER JOIN
+      propagation_tab ON  oem_price.model_code = propagation_tab.model_code  AND
       oem_price.upload_description = propagation_tab.upload_description  AND
       oem_price.month = propagation_tab.proagation_month
     optional:
@@ -145,7 +157,12 @@ transformation:
         printSchema: true
     type: operationThroughSqlQuery
 controlPort:
-  dataQualityRules: {}
+  dataQualityRules:
+    NullValueCheck:
+      productState:
+        checks:
+          - column: model_code
+        referenceAlias: load
 outputPort:
   subscriptionChannels:
     - channelType: Postgres
