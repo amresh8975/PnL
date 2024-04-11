@@ -1,4 +1,4 @@
-version: 0.0.17
+version: 0.0.22
 jobId: "1169"
 jobName: Net Sales
 jobType: Aggregated Data Product
@@ -59,255 +59,7 @@ productState:
   isDynamic: true
   alias: load_to_ADP
   retentionVersions: ""
-  logicalSchema:
-    properties:
-      model_code:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      upload_description:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      model_variant:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      model_name:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      product_group:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      market:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      variant_code:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      variant_name:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      channel:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      tm:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      fuel:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      engine_capacity:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      seating_capacity:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      plant:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      continent:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      country:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      region:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      state:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      city:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      year:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      quarter:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      month:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      group_non_group:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      trade_type:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      port:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      currency:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      net_basic:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      strategic_price:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      change_h2_per:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      change_h2_abs:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      change_budget_per:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      change_budget_abs:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      development_cost:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      cost:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      capacity_cost_adj:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      material_cost_adj:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      proposed_margin_rate:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      fob:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      fob_exchange_rate:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      budgeted_exchange_rate:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      price_change_sp_per:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      price_change_sp_abs:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      price_change_er_per:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      price_change_er_abs:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      sales_volume:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      sales_price:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      discount:
-        type: STRING
-        description: ""
-        sourceColumn: ""
-        sourceTable: ""
-      etl_inserted_date:
-        type: STRING
-        description: ""
-      etl_modified_date:
-        type: STRING
-        description: ""
-      etl_created_by:
-        type: STRING
-        description: ""
-      etl_updated_by:
-        type: STRING
-        description: ""
+  logicalSchema: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
@@ -341,50 +93,53 @@ transformation:
         tempViewName: product_master
     query: WITH sales_price_cte as ( select  model_code  , upload_description  ,
       'Domestic' as market  , continent  , country  , region  , state  , city  ,
-      year  , cast(net_basic as decimal(38,3)) as net_basic  ,
-      cast(strategic_price as decimal(38,3)) as strategic_price  ,
-      cast(change_h2_per as decimal(38,3)) as change_h2_per  ,
-      cast(change_h2_abs as decimal(38,3)) as change_h2_abs  ,
-      cast(change_budget_per as decimal(38,3)) as change_budget_per  ,
-      cast(change_budget_abs as decimal(38,3)) as change_budget_abs  ,
-      cast(discount as decimal(38,3)) as discount  , month  , cast(0 as
-      decimal(38,3)) as development_cost  , NULL as group_non_group  , NULL as
-      trade_type  , NULL as port  , NULL as currency  , cast(0 as decimal(38,3))
-      as cost  , cast(0 as decimal(38,3)) as capacity_cost_adj  , cast(0 as
-      decimal(38,3)) as material_cost_adj  , cast(0 as decimal(38,3)) as
+      year  , coalesce(cast(net_basic as decimal(38,3)), 0) as net_basic  ,
+      coalesce(cast(strategic_price as decimal(38,3)), 0) as strategic_price  ,
+      coalesce(cast(change_h2_per as decimal(38,3)), 0) as change_h2_per  ,
+      coalesce(cast(change_h2_abs as decimal(38,3)), 0) as change_h2_abs  ,
+      coalesce(cast(change_budget_per as decimal(38,3)), 0) as
+      change_budget_per  , coalesce(cast(change_budget_abs as decimal(38,3)), 0)
+      as change_budget_abs  , coalesce(cast(discount as decimal(38,3)), 0) as
+      discount  , month  , cast(0 as decimal(38,3)) as development_cost  , NULL
+      as group_non_group  , NULL as trade_type  , NULL as port  , NULL as
+      currency  , cast(0 as decimal(38,3)) as cost  , cast(0 as decimal(38,3))
+      as capacity_cost_adj  , cast(0 as decimal(38,3)) as material_cost_adj  ,
+      cast(0 as decimal(38,3)) as total_cost  , cast(0 as decimal(38,3)) as
       proposed_margin_rate  , cast(0 as decimal(38,3)) as fob  , cast(0 as
       decimal(38,3)) as fob_exchange_rate  , cast(0 as decimal(38,3)) as
       budgeted_exchange_rate  , cast(0 as decimal(38,3)) as
       price_change_sp_per  , cast(0 as decimal(38,3)) as price_change_sp_abs  ,
       cast(0 as decimal(38,3)) as price_change_er_per  , cast(0 as
-      decimal(38,3)) as price_change_er_abs  , (cast(net_basic as
-      decimal(38,3))    + cast(strategic_price as decimal(38,3))   +
-      (cast(change_h2_per as decimal(38,3)) * cast(net_basic as
-      decimal(38,3)))        /* "/ 100" - input numbers will already be divided
-      by 100 as input is in % form*/   + cast(change_h2_abs as
-      decimal(38,3))   + (cast(change_budget_per as decimal(38,3)) *
-      cast(net_basic as decimal(38,3)))    /* "/ 100" - input numbers will
-      already be divided by 100 as input is in % form*/   +
-      cast(change_budget_abs as decimal(38,3))    ) as net_price FROM
-      domestic_price UNION ALL SELECT  model_code  , upload_description  ,
+      decimal(38,3)) as price_change_er_abs  , (coalesce(cast(net_basic as
+      decimal(38,3)), 0)   + coalesce(cast(strategic_price as decimal(38,3)),
+      0)   + (coalesce(cast(change_h2_per as decimal(38,3)), 0)
+      *     (coalesce(cast(net_basic as decimal(38,3)), 0) +
+      coalesce(cast(strategic_price as decimal(38,3)), 0)))   +
+      coalesce(cast(change_h2_abs as decimal(38,3)), 0)   +
+      (coalesce(cast(change_budget_per as decimal(38,3)), 0)
+      *     (coalesce(cast(net_basic as decimal(38,3)), 0) +
+      coalesce(cast(strategic_price as decimal(38,3)), 0)))   +
+      coalesce(cast(change_budget_abs as decimal(38,3)), 0)    ) as net_price
+      FROM domestic_price UNION ALL SELECT  model_code  , upload_description  ,
       'Domestic - OEM' as market  , continent  , country  , region  , state  ,
-      city  , year  , cast(net_basic as decimal(38,3)) as net_basic  , cast(0 as
-      decimal(38,3)) as strategic_price  , cast(0 as decimal(38,3)) as
-      change_h2_per  , cast(0 as decimal(38,3)) as change_h2_abs  , cast(0 as
-      decimal(38,3)) as change_budget_per  , cast(0 as decimal(38,3)) as
-      change_budget_abs  , cast(0 as decimal(38,3)) as discount   , month  ,
-      cast(development_cost as decimal(38,3)) as development_cost  , NULL as
-      group_non_group  , NULL as trade_type  , NULL as port  , NULL as
-      currency  , cast(0 as decimal(38,3)) as cost  , cast(0 as decimal(38,3))
-      as capacity_cost_adj  , cast(0 as decimal(38,3)) as material_cost_adj  ,
-      cast(0 as decimal(38,3)) as proposed_margin_rate  , cast(0 as
-      decimal(38,3)) as fob  , cast(0 as decimal(38,3)) as fob_exchange_rate  ,
-      cast(0 as decimal(38,3)) as budgeted_exchange_rate  , cast(0 as
-      decimal(38,3)) as price_change_sp_per  , cast(0 as decimal(38,3)) as
-      price_change_sp_abs  , cast(0 as decimal(38,3)) as price_change_er_per  ,
-      cast(0 as decimal(38,3)) as price_change_er_abs  , (cast(net_basic as
-      decimal(38,3))   + cast(development_cost as decimal(38,3))    ) as
-      net_price FROM oem_price UNION ALL SELECT   model_code  ,
+      city  , year  , coalesce(cast(net_basic as decimal(38,3)), 0) as
+      net_basic  , cast(0 as decimal(38,3)) as strategic_price  , cast(0 as
+      decimal(38,3)) as change_h2_per  , cast(0 as decimal(38,3)) as
+      change_h2_abs  , cast(0 as decimal(38,3)) as change_budget_per  , cast(0
+      as decimal(38,3)) as change_budget_abs  , cast(0 as decimal(38,3)) as
+      discount   , month  , coalesce(cast(development_cost as decimal(38,3)), 0)
+      as development_cost  , NULL as group_non_group  , NULL as trade_type  ,
+      NULL as port  , NULL as currency  , cast(0 as decimal(38,3)) as cost  ,
+      cast(0 as decimal(38,3)) as capacity_cost_adj  , cast(0 as decimal(38,3))
+      as material_cost_adj  , cast(0 as decimal(38,3)) as total_cost  , cast(0
+      as decimal(38,3)) as proposed_margin_rate  , cast(0 as decimal(38,3)) as
+      fob  , cast(0 as decimal(38,3)) as fob_exchange_rate  , cast(0 as
+      decimal(38,3)) as budgeted_exchange_rate  , cast(0 as decimal(38,3)) as
+      price_change_sp_per  , cast(0 as decimal(38,3)) as price_change_sp_abs  ,
+      cast(0 as decimal(38,3)) as price_change_er_per  , cast(0 as
+      decimal(38,3)) as price_change_er_abs  , (coalesce(cast(net_basic as
+      decimal(38,3)), 0)   + coalesce(cast(development_cost as decimal(38,3)),
+      0)    ) as net_price FROM oem_price UNION ALL SELECT   model_code  ,
       upload_description  , upper(currency) as market  , continent  , country  ,
       region  , state  , city  , year  , cast(0 as decimal(38,3)) as
       net_basic  , cast(0 as decimal(38,3)) as strategic_price  , cast(0 as
@@ -392,53 +147,62 @@ transformation:
       change_h2_abs  , cast(0 as decimal(38,3)) as change_budget_per  , cast(0
       as decimal(38,3)) as change_budget_abs  , cast(0 as decimal(38,3)) as
       discount   , month  , cast(0 as decimal(38,3)) as development_cost  ,
-      group_non_group  , trade_type  , port  , currency  , cast(cost as
-      decimal(38,3)) as cost  , cast(capacity_cost_adj as decimal(38,3)) as
-      capacity_cost_adj  , cast(material_cost_adj as decimal(38,3)) as
-      material_cost_adj  , cast(proposed_margin_rate as decimal(38,3)) as
+      group_non_group  , trade_type  , port  , currency  , coalesce(cast(cost as
+      decimal(38,3)), 0) as cost  , coalesce(cast(capacity_cost_adj as
+      decimal(38,3)), 0) as capacity_cost_adj  , coalesce(cast(material_cost_adj
+      as decimal(38,3)), 0) as material_cost_adj  , (coalesce(cast(cost as
+      decimal(38,3)), 0)   + coalesce(cast(capacity_cost_adj as decimal(38,3)),
+      0)   + coalesce(cast(material_cost_adj as decimal(38,3)), 0)    ) as
+      total_cost  , coalesce(cast(proposed_margin_rate as decimal(38,3)), 0) as
       proposed_margin_rate  , cast(0 as decimal(38,3)) as fob  , cast(0 as
       decimal(38,3)) as fob_exchange_rate  , cast(0 as decimal(38,3)) as
       budgeted_exchange_rate  , cast(0 as decimal(38,3)) as
       price_change_sp_per  , cast(0 as decimal(38,3)) as price_change_sp_abs  ,
       cast(0 as decimal(38,3)) as price_change_er_per  , cast(0 as
-      decimal(38,3)) as price_change_er_abs  , ((cast(cost as decimal(38,3))   +
-      cast(capacity_cost_adj as decimal(38,3))   + cast(material_cost_adj as
-      decimal(38,3))     ) / (1 - cast(proposed_margin_rate as
-      decimal(38,3)))    ) as net_price FROM jpy_export_price UNION ALL
-      SELECT   model_code  , upload_description  , upper(currency) as market  ,
-      continent  , country  , region  , state  , city  , year  , cast(0 as
-      decimal(38,3)) as net_basic  , cast(0 as decimal(38,3)) as
-      strategic_price  , cast(0 as decimal(38,3)) as change_h2_per  , cast(0 as
-      decimal(38,3)) as change_h2_abs  , cast(0 as decimal(38,3)) as
-      change_budget_per  , cast(0 as decimal(38,3)) as change_budget_abs  ,
-      cast(0 as decimal(38,3)) as discount   , month  , cast(0 as decimal(38,3))
-      as development_cost  , group_non_group  , trade_type  , port  ,
-      currency  , cast(0 as decimal(38,3)) as cost  , cast(0 as decimal(38,3))
-      as capacity_cost_adj  , cast(0 as decimal(38,3)) as material_cost_adj  ,
-      cast(0 as decimal(38,3)) as proposed_margin_rate  , cast(fob as
-      decimal(38,3)) as fob  , cast(fob_exchange_rate as decimal(38,3)) as
-      fob_exchange_rate  , cast(budgeted_exchange_rate as decimal(38,3)) as
-      budgeted_exchange_rate  , cast(price_change_sp_per as decimal(38,3)) as
-      price_change_sp_per  , cast(price_change_sp_abs as decimal(38,3)) as
-      price_change_sp_abs  , cast(price_change_er_per as decimal(38,3)) as
-      price_change_er_per  , cast(price_change_er_abs as decimal(38,3)) as
-      price_change_er_abs  , ((cast(fob as decimal(38,3)) *
-      (cast(budgeted_exchange_rate as decimal(38,3)) / cast(fob_exchange_rate as
-      decimal(38,3))))   + (cast(price_change_sp_per as decimal(38,3)) *
-      (cast(fob as decimal(38,3)) * (cast(budgeted_exchange_rate as
-      decimal(38,3)) / cast(fob_exchange_rate as decimal(38,3)))))     /* "/
-      100" - input numbers will already be divided by 100 as input is in %
-      form*/   + cast(price_change_sp_abs as decimal(38,3))   +
-      (cast(price_change_er_per as decimal(38,3)) * (cast(fob as decimal(38,3))
-      * (cast(budgeted_exchange_rate as decimal(38,3)) / cast(fob_exchange_rate
-      as decimal(38,3)))))     /* "/ 100" - input numbers will already be
-      divided by 100 as input is in % form*/   + cast(price_change_er_abs as
-      decimal(38,3))    ) as net_price FROM non_jpy_export_price )
-      SELECT  product_master.model_code  , product_master.upload_description  ,
-      product_master.model_variant  , product_master.model_name  ,
-      product_master.group as product_group  , product_master.market  ,
-      product_master.variant_code  , product_master.variant_name  ,
-      product_master.channel  , product_master.tm  , product_master.fuel  ,
+      decimal(38,3)) as price_change_er_abs  , ((coalesce(cast(cost as
+      decimal(38,3)), 0)   + coalesce(cast(capacity_cost_adj as decimal(38,3)),
+      0)   + coalesce(cast(material_cost_adj as decimal(38,3)), 0)     ) / (1 -
+      coalesce(cast(proposed_margin_rate as decimal(38,3)), 0))    ) as
+      net_price FROM jpy_export_price UNION ALL SELECT   model_code  ,
+      upload_description  , upper(currency) as market  , continent  , country  ,
+      region  , state  , city  , year  , cast(0 as decimal(38,3)) as
+      net_basic  , cast(0 as decimal(38,3)) as strategic_price  , cast(0 as
+      decimal(38,3)) as change_h2_per  , cast(0 as decimal(38,3)) as
+      change_h2_abs  , cast(0 as decimal(38,3)) as change_budget_per  , cast(0
+      as decimal(38,3)) as change_budget_abs  , cast(0 as decimal(38,3)) as
+      discount   , month  , cast(0 as decimal(38,3)) as development_cost  ,
+      group_non_group  , trade_type  , port  , currency  , cast(0 as
+      decimal(38,3)) as cost  , cast(0 as decimal(38,3)) as capacity_cost_adj  ,
+      cast(0 as decimal(38,3)) as material_cost_adj  , cast(0 as decimal(38,3))
+      as total_cost  , cast(0 as decimal(38,3)) as proposed_margin_rate  ,
+      coalesce(cast(fob as decimal(38,3)), 0) as fob  ,
+      coalesce(cast(fob_exchange_rate as decimal(38,3)), 0) as
+      fob_exchange_rate  , coalesce(cast(budgeted_exchange_rate as
+      decimal(38,3)), 0) as budgeted_exchange_rate  ,
+      coalesce(cast(price_change_sp_per as decimal(38,3)), 0) as
+      price_change_sp_per  , coalesce(cast(price_change_sp_abs as
+      decimal(38,3)), 0) as price_change_sp_abs  ,
+      coalesce(cast(price_change_er_per as decimal(38,3)), 0) as
+      price_change_er_per  , coalesce(cast(price_change_er_abs as
+      decimal(38,3)), 0) as price_change_er_abs  , ((coalesce(cast(fob as
+      decimal(38,3)), 0) * (coalesce(cast(budgeted_exchange_rate as
+      decimal(38,3)), 0) / coalesce(cast(fob_exchange_rate as decimal(38,3)),
+      0)))   + (coalesce(cast(price_change_sp_per as decimal(38,3)), 0) *
+      (coalesce(cast(fob as decimal(38,3)), 0) *
+      (coalesce(cast(budgeted_exchange_rate as decimal(38,3)), 0) /
+      coalesce(cast(fob_exchange_rate as decimal(38,3)), 0))))   +
+      coalesce(cast(price_change_sp_abs as decimal(38,3)), 0)   +
+      (coalesce(cast(price_change_er_per as decimal(38,3)), 0) *
+      (coalesce(cast(fob as decimal(38,3)), 0) *
+      (coalesce(cast(budgeted_exchange_rate as decimal(38,3)), 0) /
+      coalesce(cast(fob_exchange_rate as decimal(38,3)), 0))))   +
+      coalesce(cast(price_change_er_abs as decimal(38,3)), 0)    ) as net_price
+      FROM non_jpy_export_price ) SELECT  product_master.model_code  ,
+      product_master.upload_description  , product_master.model_variant  ,
+      product_master.model_name  , product_master.group as product_group  ,
+      product_master.market  , product_master.variant_code  ,
+      product_master.variant_name  , product_master.channel  ,
+      product_master.tm  , product_master.fuel  ,
       product_master.engine_capacity  , product_master.seating_capacity  ,
       product_master.plant  , COALESCE(sales_price_cte.continent,
       sales_volume.continent) as continent  , COALESCE(sales_price_cte.country,
@@ -469,12 +233,10 @@ transformation:
       sales_price_cte.price_change_sp_per  ,
       sales_price_cte.price_change_sp_abs  ,
       sales_price_cte.price_change_er_per  ,
-      sales_price_cte.price_change_er_abs  , cast(sales_volume.volume as
-      decimal(38,0)) as sales_volume  , cast(sales_price_cte.net_price as
-      decimal(38,0)) as sales_price  , sales_price_cte.discount  ,
-      current_timestamp() as etl_inserted_date  , current_timestamp() as
-      etl_modified_date  , 'platform_admin' as etl_created_by  ,
-      'platform_admin' as etl_updated_by FROM  product_master   INNER
+      sales_price_cte.price_change_er_abs  , coalesce(cast(sales_volume.volume
+      as decimal(38,0)), 0) as sales_volume  ,
+      coalesce(cast(sales_price_cte.net_price as decimal(38,0)), 0) as
+      sales_price  , sales_price_cte.discount FROM  product_master   INNER
       JOIN  sales_volume  ON sales_volume.model_code =
       product_master.model_code   AND sales_volume.upload_description =
       product_master.upload_description  INNER JOIN  sales_price_cte  ON
