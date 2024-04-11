@@ -1,4 +1,4 @@
-version: 0.0.23
+version: 0.0.25
 jobId: "1169"
 jobName: Net Sales
 jobType: Aggregated Data Product
@@ -469,9 +469,9 @@ transformation:
       COALESCE(sales_price_cte.month, sales_volume.month) IN ('Apr', 'May',
       'Jun') THEN 'Q1'   WHEN COALESCE(sales_price_cte.month,
       sales_volume.month) IN ('Jul', 'Aug', 'Sep') THEN 'Q2'   WHEN
-      COALESCE(sales_price_cte.month, sales_volume.month) IN ('Jul', 'Aug',
-      'Sep') THEN 'Q3'   WHEN COALESCE(sales_price_cte.month,
-      sales_volume.month) IN ('Jul', 'Aug', 'Sep') THEN 'Q4'    END AS
+      COALESCE(sales_price_cte.month, sales_volume.month) IN ('Oct', 'Nov',
+      'Dec') THEN 'Q3'   WHEN COALESCE(sales_price_cte.month,
+      sales_volume.month) IN ('Jan', 'Feb', 'Mar') THEN 'Q4'    END AS
       quarter  , COALESCE(sales_price_cte.month, sales_volume.month) as month  ,
       COALESCE(sales_price_cte.group_non_group, sales_volume.group_non_group) as
       group_non_group  , COALESCE(sales_price_cte.trade_type,
@@ -492,7 +492,7 @@ transformation:
       sales_price_cte.price_change_er_abs  , coalesce(cast(sales_volume.volume
       as decimal(38,0)), 0) as sales_volume  ,
       coalesce(cast(sales_price_cte.net_price as decimal(38,0)), 0) as
-      sales_price  , sales_price_cte.discount FROM  product_master   INNER
+      sales_price  , sales_price_cte.discount FROM  product_master  INNER
       JOIN  sales_volume  ON sales_volume.model_code =
       product_master.model_code   AND sales_volume.upload_description =
       product_master.upload_description  INNER JOIN  sales_price_cte  ON
