@@ -1,4 +1,4 @@
-version: 0.0.38
+version: 0.0.40
 jobId: "1148"
 jobName: Domestic Sales Price
 jobType: Source Aligned Data Product
@@ -9,7 +9,7 @@ discoveryPort:
 inputPorts:
   - alias: Domestic_Price_1
     isDynamic: true
-    path: /data/PnL/Output/Sales/DomesticPrice/
+    path: /data/use-case/PnL/Output/Sales/DomesticPrice
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -140,50 +140,53 @@ transformation:
     inputDataFrameList:
       - inputDataFrame: Domestic_Price_1
         tempViewName: domestic_price
-    query: WITH month_cte AS( SELECT  all_months.col1 AS
-      month_name,  all_months.col2 AS month_seq
-      FROM  (  SELECT   explode(ARRAY(("Apr",   1),   ("May",   2),   ("Jun",   3),   ("Jul",   4),   ("Aug",   5),   ("Sep",   6),   ("Oct",   7),   ("Nov",   8),   ("Dec",   9),   ("Jan",   10),   ("Feb",   11),   ("Mar",   12)))
-      AS all_months ) months_tab ), domestic_price_cte AS( SELECT  model_code
+    query: with month_cte as( select  all_months.col1 as
+      month_name,  all_months.col2 as month_seq
+      from  (  select   explode(array(("Apr",   1),   ("May",   2),   ("Jun",   3),   ("Jul",   4),   ("Aug",   5),   ("Sep",   6),   ("Oct",   7),   ("Nov",   8),   ("Dec",   9),   ("Jan",   10),   ("Feb",   11),   ("Mar",   12)))
+      as all_months ) months_tab ), domestic_price_cte as( select  model_code
       ,  upload_description ,  continent ,  country ,  region ,  state ,  city
-      ,  YEAR ,  basic_net_of_drf_tool_kit AS net_basic ,  strategic_price
+      ,  year ,  basic_net_of_drf_tool_kit as net_basic ,  strategic_price
       ,  change_h2_per ,  change_h2_abs ,  change_budget_per
-      ,  change_budget_abs ,  discount ,  CASE   WHEN initcap(trim(MONTH)) IN
-      ('Apr', 'April') THEN 'Apr'   WHEN initcap(trim(MONTH)) IN ('May') THEN
-      'May'   WHEN initcap(trim(MONTH)) IN ('Jun', 'June') THEN 'Jun'   WHEN
-      initcap(trim(MONTH)) IN ('Jul', 'July') THEN 'Jul'   WHEN
-      initcap(trim(MONTH)) IN ('Aug', 'August') THEN 'Aug'   WHEN
-      initcap(trim(MONTH)) IN ('Sep', 'September') THEN 'Sep'   WHEN
-      initcap(trim(MONTH)) IN ('Oct', 'October') THEN 'Oct'   WHEN
-      initcap(trim(MONTH)) IN ('Nov', 'November') THEN 'Nov'   WHEN
-      initcap(trim(MONTH)) IN ('Dec', 'December') THEN 'Dec'   WHEN
-      initcap(trim(MONTH)) IN ('Jan', 'January') THEN 'Jan'   WHEN
-      initcap(trim(MONTH)) IN ('Feb', 'February') THEN 'Feb'   WHEN
-      initcap(trim(MONTH)) IN ('Mar', 'March') THEN 'Mar'  END AS MONTH
-      FROM  domestic_price ), propagation_tab AS (
-      SELECT  row_gen_months.model_code ,  row_gen_months.upload_description
-      ,  row_gen_months.month_name AS MONTH
-      ,  last_value(domestic_price.month,  TRUE) OVER (PARTITION BY
-      row_gen_months.model_code,  row_gen_months.upload_description ORDER
-      BY  row_gen_months.month_seq) proagation_month FROM  ((  SELECT   DISTINCT
-      model_code,   upload_description  FROM   domestic_price_cte) AS
-      domestic_price CROSS JOIN month_cte ) row_gen_months LEFT JOIN
-      domestic_price_cte domestic_price ON  domestic_price.model_code =
-      row_gen_months.model_code  AND domestic_price.upload_description =
-      row_gen_months.upload_description  AND domestic_price.month =
-      row_gen_months.month_name ) SELECT  domestic_price.model_code
+      ,  change_budget_abs ,  discount ,  case   when initcap(trim(month)) in
+      ('Apr', 'April') then 'Apr'   when initcap(trim(month)) in ('May') then
+      'May'   when initcap(trim(month)) in ('Jun', 'June') then 'Jun'   when
+      initcap(trim(month)) in ('Jul', 'July') then 'Jul'   when
+      initcap(trim(month)) in ('Aug', 'August') then 'Aug'   when
+      initcap(trim(month)) in ('Sep', 'September') then 'Sep'   when
+      initcap(trim(month)) in ('Oct', 'October') then 'Oct'   when
+      initcap(trim(month)) in ('Nov', 'November') then 'Nov'   when
+      initcap(trim(month)) in ('Dec', 'December') then 'Dec'   when
+      initcap(trim(month)) in ('Jan', 'January') then 'Jan'   when
+      initcap(trim(month)) in ('Feb', 'February') then 'Feb'   when
+      initcap(trim(month)) in ('Mar', 'March') then 'Mar'  end as month
+      from  domestic_price ), propagation_tab as (
+      select  row_gen_months.model_code ,  row_gen_months.upload_description
+      ,  row_gen_months.month_name as month
+      ,  last_value(domestic_price.month,  true) over (partition by
+      row_gen_months.model_code,  row_gen_months.upload_description order
+      by  row_gen_months.month_seq) proagation_month from  ((  select   distinct
+      model_code,   upload_description  from   domestic_price_cte) as
+      domestic_price cross join month_cte ) row_gen_months left join
+      domestic_price_cte domestic_price on  domestic_price.model_code =
+      row_gen_months.model_code  and domestic_price.upload_description =
+      row_gen_months.upload_description  and domestic_price.month =
+      row_gen_months.month_name ) select  domestic_price.model_code
       ,  domestic_price.upload_description ,  domestic_price.continent
       ,  domestic_price.country ,  domestic_price.region ,  domestic_price.state
-      ,  domestic_price.city ,  domestic_price.year ,  domestic_price.net_basic
+      ,  domestic_price.city ,  case when propagation_tab.proagation_month in
+      ('Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')     and
+      propagation_tab.month in ('Jan', 'Feb', 'Mar')    then domestic_price.year
+      + 1    else domestic_price.year    end as year ,  domestic_price.net_basic
       ,  domestic_price.strategic_price ,  domestic_price.change_h2_per
       ,  domestic_price.change_h2_abs ,  domestic_price.change_budget_per
       ,  domestic_price.change_budget_abs ,  domestic_price.discount
-      ,  propagation_tab.MONTH,  current_timestamp() AS
-      etl_inserted_date,  current_timestamp() AS
-      etl_modified_date,  'platform_admin' AS etl_created_by,  'platform_admin'
-      AS etl_updated_by FROM  domestic_price_cte AS domestic_price INNER JOIN
-      propagation_tab ON  domestic_price.model_code =
-      propagation_tab.model_code  AND domestic_price.upload_description =
-      propagation_tab.upload_description  AND domestic_price.month =
+      ,  propagation_tab.MONTH,  current_timestamp() as
+      etl_inserted_date,  current_timestamp() as
+      etl_modified_date,  'platform_admin' as etl_created_by,  'platform_admin'
+      as etl_updated_by from  domestic_price_cte as domestic_price inner join
+      propagation_tab on  domestic_price.model_code =
+      propagation_tab.model_code  and domestic_price.upload_description =
+      propagation_tab.upload_description  and domestic_price.month =
       propagation_tab.proagation_month
     optional:
       persistDataFrame: false
