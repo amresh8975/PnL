@@ -1,4 +1,4 @@
-version: 0.0.15
+version: 0.0.18
 jobId: "1170"
 jobName: Sales Volume
 jobType: Source Aligned Data Product
@@ -9,7 +9,7 @@ discoveryPort:
 inputPorts:
   - alias: Volume__1
     isDynamic: true
-    path: /data/PnL/Output/Sales/Volume/
+    path: /data/use-case/PnL/Output/Sales/Volume
     optional:
       persistDataFrame: false
       advanceOptions:
@@ -97,30 +97,34 @@ transformation:
     inputDataFrameList:
       - inputDataFrame: Volume__1
         tempViewName: Volume
-    query: select    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Apr"
-      as month,    apr as volume  FROM    VOLUME  UNION
-      ALL  SELECT     model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "May"
-      as month,    may as volume  FROM    VOLUME  UNION
-      ALL  SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Jun"
-      as month,    jun as volume  from    volume  union
-      all  select    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Jul"
-      as month,    jul as volume  FROM    VOLUME  UNION
-      ALL  SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Aug"
-      as month,    aug as volume  FROM    VOLUME  UNION
-      ALL  SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Sep"
-      as month,    sep as volume  FROM    VOLUME  UNION
-      ALL  SELECT     model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Oct"
-      as month,    oct as volume  FROM    VOLUME  UNION
-      ALL  SELECT     model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Nov"
-      as month,    dec as volume  FROM    VOLUME  UNION
-      ALL  SELECT     model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Dec"
-      as month,    dec as volume  FROM    VOLUME  UNION
-      ALL  SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Jan"
-      as month,    jan as volume  FROM    VOLUME  UNION
-      ALL  SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Feb"
-      as month,    feb as volume  FROM    VOLUME  UNION
-      ALL  SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Mar"
-      as month,    mar as volume  FROM    VOLUME ;
+    query: SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    Month,    Volume,   current_timestamp()
+      AS etl_inserted_date,   current_timestamp() AS
+      etl_modified_date,   'platform_admin' AS
+      etl_created_by,   'platform_admin' AS
+      etl_updated_by    FROM  (      SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Apr"
+      as month,    apr as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "May"
+      as month,    may as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Jun"
+      as month,    jun as volume    from    volume    union
+      all    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Jul"
+      as month,    jul as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Aug"
+      as month,    aug as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Sep"
+      as month,    sep as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Oct"
+      as month,    oct as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Nov"
+      as month,    nov as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Dec"
+      as month,    dec as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Jan"
+      as month,    jan as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Feb"
+      as month,    feb as volume    FROM    VOLUME    UNION
+      ALL    SELECT    model_code,    upload_description,    continent,    country,    region,    state,    city,    group_non_group,    trade_type,    port,    currency,    "Mar"
+      as month,    mar as volume    FROM    VOLUME  )
     optional:
       persistDataFrame: false
     type: operationThroughSqlQuery
