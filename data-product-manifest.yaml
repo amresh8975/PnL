@@ -1,4 +1,4 @@
-version: 0.0.21
+version: 0.0.23
 jobId: "1170"
 jobName: Sales Volume
 jobType: Source Aligned Data Product
@@ -27,55 +27,55 @@ productState:
     properties:
       Model_Code:
         type: STRING
-        description: ""
+        description: 16 digit Production Code
       Upload_Description:
         type: STRING
-        description: ""
+        description: Description of 16 digit Production Code
       Continent:
         type: STRING
-        description: ""
+        description: Name of the continent in which the model is being exported
       Country:
         type: STRING
-        description: ""
+        description: Name of the country in which the model is being exported
       Region:
         type: STRING
-        description: ""
+        description: Name of the region in which the model is being sold
       State:
         type: STRING
-        description: ""
+        description: Name of the state in which the model is being sold
       City:
         type: STRING
-        description: ""
+        description: Name of the city in which the model is being sold
       Group_Non_Group:
         type: STRING
-        description: ""
+        description: Group or Non-Group
       Trade_Type:
         type: STRING
-        description: ""
+        description: Trade Type
       Port:
         type: STRING
-        description: ""
+        description: Port Name
       Currency:
         type: STRING
-        description: ""
+        description: Currency
       Month:
         type: STRING
-        description: ""
+        description: Month
       Volume:
         type: STRING
-        description: ""
+        description: Sales Volume
       etl_inserted_date:
         type: STRING
-        description: ""
+        description: Date when the record was inserted by ETL
       etl_modified_date:
         type: STRING
-        description: ""
+        description: Date when the record was last modified by ETL
       etl_created_by:
         type: STRING
-        description: ""
+        description: Creator of the ETL process
       etl_updated_by:
         type: STRING
-        description: ""
+        description: Last updater of the ETL process
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
