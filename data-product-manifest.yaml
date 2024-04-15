@@ -1,4 +1,4 @@
-version: 0.0.17
+version: 0.0.18
 jobId: "1156"
 jobName: OEM Sales Price
 jobType: Source Aligned Data Product
@@ -27,71 +27,75 @@ productState:
     properties:
       model_code:
         type: STRING
-        description: ""
+        description: 16 digit Production Code
         sourceColumn: ""
         sourceTable: ""
       upload_description:
         type: STRING
-        description: ""
+        description: Description of 16 digit Production Code
         sourceColumn: ""
         sourceTable: ""
       continent:
         type: STRING
-        description: ""
+        description: Name of the continent in which the model is being exported
         sourceColumn: ""
         sourceTable: ""
       country:
         type: STRING
-        description: ""
+        description: Name of the country in which the model is being exported
         sourceColumn: ""
         sourceTable: ""
       region:
         type: STRING
-        description: ""
+        description: Name of the region in which the model is being sold
         sourceColumn: ""
         sourceTable: ""
       state:
         type: STRING
-        description: ""
+        description: Name of the state in which the model is being sold
         sourceColumn: ""
         sourceTable: ""
       city:
         type: STRING
-        description: ""
+        description: Name of the city in which the model is being sold
         sourceColumn: ""
         sourceTable: ""
       year:
         type: STRING
-        description: ""
+        description: Financial Year
         sourceColumn: ""
         sourceTable: ""
       net_basic:
         type: STRING
-        description: ""
+        description: Basic Sales Price including Tool Kit
         sourceColumn: ""
         sourceTable: ""
       development_cost:
         type: STRING
-        description: ""
+        description: Development Cost
         sourceColumn: ""
         sourceTable: ""
       month:
         type: STRING
-        description: ""
+        description: Month
         sourceColumn: ""
         sourceTable: ""
       etl_inserted_date:
         type: STRING
-        description: ""
+        description: Date when the record was inserted by ETL
       etl_modified_date:
         type: STRING
-        description: ""
+        description: Date when the record was last modified by ETL
       etl_created_by:
         type: STRING
-        description: ""
+        description: Creator of the ETL process
+        sourceColumn: ""
+        sourceTable: ""
       etl_updated_by:
         type: STRING
-        description: ""
+        description: Last updater of the ETL process
+        sourceColumn: ""
+        sourceTable: ""
   stateStoreType: loadDataIceberg
   isProfilingEnabled: false
   updateStrategy: Overwrite
@@ -113,47 +117,55 @@ transformation:
     inputDataFrameList:
       - inputDataFrame: OEM_Price_1
         tempViewName: oem_price
-    query: with month_cte as( select  all_months.col1 as
-      month_name,  all_months.col2 as month_seq
-      from  (  select   explode(array(("Apr",   1),   ("May",   2),   ("Jun",   3),   ("Jul",   4),   ("Aug",   5),   ("Sep",   6),   ("Oct",   7),   ("Nov",   8),   ("Dec",   9),   ("Jan",   10),   ("Feb",   11),   ("Mar",   12)))
-      as all_months ) months_tab ), oem_price_cte as( select  Model_Code
-      ,  Upload_Description ,  Continent ,  Country ,  Region ,  State ,  City
-      ,  year ,  Basic_Sales_Price_inc_Tool_Kit as net_basic ,  Development_Cost
-      ,  case   when initcap(trim(month)) in ('Apr', 'April') then 'Apr'   when
-      initcap(trim(month)) in ('May') then 'May'   when initcap(trim(month)) in
-      ('Jun', 'June') then 'Jun'   when initcap(trim(month)) in ('Jul', 'July')
-      then 'Jul'   when initcap(trim(month)) in ('Aug', 'August') then
-      'Aug'   when initcap(trim(month)) in ('Sep', 'September') then
-      'Sep'   when initcap(trim(month)) in ('Oct', 'October') then 'Oct'   when
-      initcap(trim(month)) in ('Nov', 'November') then 'Nov'   when
-      initcap(trim(month)) in ('Dec', 'December') then 'Dec'   when
-      initcap(trim(month)) in ('Jan', 'January') then 'Jan'   when
-      initcap(trim(month)) in ('Feb', 'February') then 'Feb'   when
-      initcap(trim(month)) in ('Mar', 'March') then 'Mar'  end as month
-      from  oem_price ), propagation_tab as ( select  row_gen_months.model_code
-      ,  row_gen_months.upload_description ,  row_gen_months.month_name as month
-      ,  last_value(oem_price.month,  true) over (partition by
-      row_gen_months.model_code,  row_gen_months.upload_description order
-      by  row_gen_months.month_seq) proagation_month from  ((  select   distinct
-      model_code,   upload_description  from   oem_price_cte) as oem_price cross
-      join month_cte ) row_gen_months left join oem_price_cte oem_price
-      on  oem_price.model_code = row_gen_months.model_code  and
-      oem_price.upload_description = row_gen_months.upload_description  and
-      oem_price.month = row_gen_months.month_name ) select  oem_price.Model_Code
-      ,  oem_price.Upload_Description ,  oem_price.Continent
-      ,  oem_price.Country ,  oem_price.Region ,  oem_price.State
-      ,  oem_price.City ,  case when propagation_tab.proagation_month in ('Apr',
-      'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')     and
-      propagation_tab.month in ('Jan', 'Feb', 'Mar')    then oem_price.year +
-      1    else oem_price.year    end as year ,  oem_price.net_basic
-      ,  oem_price.Development_Cost
-      ,  propagation_tab.MONTH,  current_timestamp() as
-      etl_inserted_date,  current_timestamp() as
-      etl_modified_date,  'platform_admin' as etl_created_by,  'platform_admin'
-      as etl_updated_by from  oem_price_cte as oem_price inner join
-      propagation_tab on  oem_price.model_code = propagation_tab.model_code  and
-      oem_price.upload_description = propagation_tab.upload_description  and
-      oem_price.month = propagation_tab.proagation_month
+    query: with month_cte as(   select      all_months.col1 as
+      month_name,      all_months.col2 as
+      month_seq    from      (       select          explode(           array(             ("Apr",
+      1),              ("May", 2),              ("Jun", 3),              ("Jul",
+      4),              ("Aug", 5),              ("Sep", 6),              ("Oct",
+      7),              ("Nov", 8),              ("Dec", 9),              ("Jan",
+      10),              ("Feb", 11),              ("Mar",
+      12)           )         ) as all_months     ) months_tab ),  oem_price_cte
+      as(   select      Model_Code,      Upload_Description,      Continent,      Country,      Region,      State,      City,      year,      Basic_Sales_Price_inc_Tool_Kit
+      as net_basic,      Development_Cost,      case when
+      initcap(       trim(month)     ) in ('Apr', 'April') then 'Apr' when
+      initcap(       trim(month)     ) in ('May') then 'May' when
+      initcap(       trim(month)     ) in ('Jun', 'June') then 'Jun' when
+      initcap(       trim(month)     ) in ('Jul', 'July') then 'Jul' when
+      initcap(       trim(month)     ) in ('Aug', 'August') then 'Aug' when
+      initcap(       trim(month)     ) in ('Sep', 'September') then 'Sep' when
+      initcap(       trim(month)     ) in ('Oct', 'October') then 'Oct' when
+      initcap(       trim(month)     ) in ('Nov', 'November') then 'Nov' when
+      initcap(       trim(month)     ) in ('Dec', 'December') then 'Dec' when
+      initcap(       trim(month)     ) in ('Jan', 'January') then 'Jan' when
+      initcap(       trim(month)     ) in ('Feb', 'February') then 'Feb' when
+      initcap(       trim(month)     ) in ('Mar', 'March') then 'Mar' end as
+      month    from      oem_price ),  propagation_tab as
+      (   select      row_gen_months.model_code,      row_gen_months.upload_description,      row_gen_months.month_name
+      as month,      last_value(oem_price.month, true) over (       partition by
+      row_gen_months.model_code,        row_gen_months.upload_description        order
+      by          row_gen_months.month_seq     )
+      proagation_month    from      (       (         select            distinct
+      model_code,            upload_description          from            oem_price_cte       )
+      as oem_price cross        join month_cte     ) row_gen_months      left
+      join oem_price_cte oem_price on oem_price.model_code =
+      row_gen_months.model_code      and oem_price.upload_description =
+      row_gen_months.upload_description      and oem_price.month =
+      row_gen_months.month_name
+      )  select    oem_price.Model_Code,    oem_price.Upload_Description,    oem_price.Continent,    oem_price.Country,    oem_price.Region,    oem_price.State,    oem_price.City,    case
+      when propagation_tab.proagation_month in (     'Apr', 'May', 'Jun', 'Jul',
+      'Aug', 'Sep',      'Oct', 'Nov', 'Dec'   )    and propagation_tab.month in
+      ('Jan', 'Feb', 'Mar') then oem_price.year + 1 else oem_price.year end as
+      year,    cast(oem_price.net_basic as  decimal(38, 5))
+      net_basic,    cast(oem_price.Development_Cost as  decimal(38, 5))
+      Development_Cost,    propagation_tab.MONTH ,    current_timestamp() as
+      etl_inserted_date,    current_timestamp() as
+      etl_modified_date,    'platform_admin' as
+      etl_created_by,    'platform_admin' as
+      etl_updated_by  from    oem_price_cte as oem_price    inner join
+      propagation_tab on oem_price.model_code =
+      propagation_tab.model_code    and oem_price.upload_description =
+      propagation_tab.upload_description    and oem_price.month =
+      propagation_tab.proagation_month
     optional:
       persistDataFrame: false
       loggingOptions:
