@@ -1,4 +1,4 @@
-version: 0.0.13
+version: 0.0.14
 jobId: "1157"
 jobName: JPY Export Sales Price
 jobType: Source Aligned Data Product
@@ -187,20 +187,23 @@ transformation:
       when propagation_tab.proagation_month in (     'Apr', 'May', 'Jun', 'Jul',
       'Aug', 'Sep',      'Oct', 'Nov', 'Dec'   )    and propagation_tab.month in
       ('Jan', 'Feb', 'Mar') then export_jpy_price.year + 1 else
-      export_jpy_price.year end as year,    Cast( export_jpy_price.cost as
-      decimal(38, 5)) cost,    Cast( export_jpy_price.capacity_cost_adj as
-      decimal(38, 5)) capacity_cost_adj,    Cast(
-      export_jpy_price.material_cost_adj as decimal(38, 5))
-      material_cost_adj,    Cast( export_jpy_price.proposed_margin_rate as
-      decimal(38, 5)) proposed_margin_rate,    Cast(
-      propagation_tab.MONTH,    current_timestamp() as
-      etl_inserted_date,    current_timestamp() as
-      etl_modified_date,    'platform_admin' as
-      etl_created_by,    'platform_admin' as
-      etl_updated_by  from    export_jpy_price_cte as export_jpy_price    inner
-      join propagation_tab on export_jpy_price.model_code =
-      propagation_tab.model_code    and export_jpy_price.upload_description =
-      propagation_tab.upload_description    and export_jpy_price.month =
+      export_jpy_price.year end as year,    Cast(     export_jpy_price.cost as
+      decimal(38, 5)   ) cost,    Cast(     export_jpy_price.capacity_cost_adj
+      as decimal(38, 5)   )
+      capacity_cost_adj,    Cast(     export_jpy_price.material_cost_adj as
+      decimal(38, 5)   )
+      material_cost_adj,    Cast(     export_jpy_price.proposed_margin_rate as
+      decimal(38, 5)   )
+      proposed_margin_rate,    Cast(     propagation_tab.MONTH as decimal(38,
+      5)   ) MONTH ,      current_timestamp() as
+      etl_inserted_date,      current_timestamp() as
+      etl_modified_date,      'platform_admin' as
+      etl_created_by,      'platform_admin' as
+      etl_updated_by      from        export_jpy_price_cte as
+      export_jpy_price        inner join propagation_tab on
+      export_jpy_price.model_code = propagation_tab.model_code        and
+      export_jpy_price.upload_description =
+      propagation_tab.upload_description        and export_jpy_price.month =
       propagation_tab.proagation_month
     optional:
       persistDataFrame: false
