@@ -1,9 +1,9 @@
-version: 0.0.45
+version: 0.0.46
 jobId: "1148"
 jobName: Domestic Sales Price
 jobType: Source Aligned Data Product
 domain: finance
-alias: load_to_target
+alias: load_data_to_target_Domestic_sales_
 discoveryPort:
   name: Domestic Sales Price
 inputPorts:
@@ -21,7 +21,7 @@ inputPorts:
     type: inputDelimited
 productState:
   isDynamic: true
-  alias: load_to_target
+  alias: load_data_to_target_Domestic_sales_
   retentionVersions: ""
   logicalSchema:
     properties:
@@ -212,7 +212,7 @@ controlPort:
       productState:
         checks:
           - column: model_code
-        referenceAlias: load_to_target
+        referenceAlias: load_data_to_target_Domestic_sales_
 outputPort:
   subscriptionChannels:
     - channelType: Postgres
