@@ -1,4 +1,4 @@
-version: 0.0.25
+version: 0.0.26
 jobId: "1168"
 jobName: Non JPY Export Sales Price
 jobType: Source Aligned Data Product
@@ -235,9 +235,3 @@ controlPort:
         checks:
           - column: model_code
         referenceAlias: load_non_jpy_export_price
-outputPort:
-  subscriptionChannels:
-    - channelType: Postgres
-      queryType: SQL
-    - channelType: Dataproduct
-      queryType: SQL
